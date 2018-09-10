@@ -1,7 +1,7 @@
 import phue
 import discoverhue
 from phue import Group
-import pprint #Wwill be removed
+import pprint #will be removed
 
 
 def discovery():
@@ -26,7 +26,7 @@ def connectToBridge(bridgeIP):
     bridge = phue.Bridge(bridgeIP)
     # TODO ask the user to press the button on the bridge, show a timer
     # this next line has to be run only once.
-    #bridge.connect()
+    bridge.connect()
     return bridge
 
 def scanForRooms(bridge):
