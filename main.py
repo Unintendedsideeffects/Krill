@@ -1,7 +1,7 @@
 import phue
 import discoverhue
 from phue import Group
-import pprint
+import pprint #Wwill be removed
 
 
 def discovery():
@@ -25,10 +25,12 @@ def stripIP(ipToStrip):
 def connectToBridge(bridgeIP):
     bridge = phue.Bridge(bridgeIP)
     # TODO ask the user to press the button on the bridge, show a timer
+    # this next line has to be run only once.
     #bridge.connect()
     return bridge
 
 def scanForRooms(bridge):
+    #Rooms are very limited, groups are more flexible, rooms are a subset of groups.
     groups = bridge.get_group()
     rooms = []
     for key, val in groups.items():
