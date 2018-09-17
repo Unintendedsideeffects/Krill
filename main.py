@@ -38,8 +38,11 @@ def scanForRooms():
             rooms.append(val)
     return rooms
 
-def getRoomNames():
-    rooms = scanForRooms()
+def getRoomNames(target = None):
+    if target == None:
+        rooms = scanForRooms()
+    else:
+        rooms = target
     roomNames = []
     for room in rooms:
         roomNames.append(room['name'])
@@ -60,7 +63,10 @@ def getLights(target = None):
     if target == None:
         return bridge.lights
     else:
-        bridge.get_group(target, 'lights')
+        target = target['name']
+        id = int(bridge.get_group_id_by_name(target))
+        print(id)
+        return bridge.get_group(id, 'lights')
 
 def getGroups():
     return bridge.get_group()
@@ -72,22 +78,75 @@ def getGroupsNames():
         groupNames.append(val['name'])
     return groupNames
 
-def getRoombyName(name, rooms = None):
+def getRoombyName(name, target = None):
     
-    if rooms != None:
-        NotImplemented
-    else:
+    if target == None:
         rooms=scanForRooms()
-        for room in rooms:
-            if (room['name'] == name):
-                return room
+    else:
+        rooms = target
+    for room in rooms:
+        if (room['name'] == name):
+            return room
         
+def filterRooms(state):
+    filteredRooms = []
+    rooms = scanForRooms()
+    for room in rooms:
+        roomState = room['state']
+        if roomState[state] == True:
+            filteredRooms.append(room)
     
+    return filteredRooms
+
+def groupLights(target):
+    allLightsNames = []
+    lights = getLights(target)
+    pprint.pprint(lights)
+    for light in lights:
+        allLightsNames.append((bridge.get_light(int(light), 'name')))
+    return allLightsNames
+
+
+def areAllColor(lights):
+    #all of them should have the 'hue' parameter
+    # lightObjects = []
+    for light in lights:
+        check = bridge.get_light(light)
+        if ('hue' not in check['state'].keys()):
+            return False
+    
+    return True
+
+def lightTurnOn(lights):
+    for light in lights:
+        bridge.set_light(light, 'on', True)
+        
+def lightTurnOff(lights):
+    for light in lights:
+        bridge.set_light(light, 'on', False)
+
+def setLightBrightness(lights, brightness):
+    for light in lights:
+        bridge.set_light(light, 'bri', brightness)
+
+def getLightBrightness(lights):
+    for light in lights:
+        tmp = bridge.get_light(light)
+        if(tmp['state']['on'] != False):
+            return(tmp['state']['bri'])
+        else:
+            return('Off')
+
+def brightnessToPercentage(brightness):
+    return format((float(brightness)/254.0)*100, '.2f')
+
 
 # Main
 bridge = discovery()
+# pprint.pprint(bridge.get_light('Storage light 1'))
+# pprint.pprint(bridge.get_light('Office desk'))
 
+
+# print(getGroupsNames())
+# getLights('Office')
 # pprint.pprint(scanForRooms())
-
-
-
