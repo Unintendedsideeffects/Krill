@@ -1,5 +1,6 @@
 import phue
 import discoverhue
+# import pyconfigstore
 from phue import Group
 import pprint #will be removed
 
@@ -8,7 +9,6 @@ def discovery():
     found = discoverhue.find_bridges()
     #numberOfBridges = len(found)
     # if numberOfBridges > 1:
-        
         # TODO if the number of bridges is more than one make them pick one
     bridgeID=next(iter(found.keys()))
     bridgeIP=found[bridgeID]
@@ -26,10 +26,10 @@ def connectToBridge(bridgeIP):
     bridge = phue.Bridge(bridgeIP)
     # TODO ask the user to press the button on the bridge, show a timer
     # this next line has to be run only once.
-    bridge.connect()
+    # bridge.connect()
     return bridge
 
-def scanForRooms(bridge):
+def scanForRooms():
     #Rooms are very limited, groups are more flexible, rooms are a subset of groups.
     groups = bridge.get_group()
     rooms = []
@@ -37,7 +37,13 @@ def scanForRooms(bridge):
         if val['type'] == 'Room':
             rooms.append(val)
     return rooms
-
+    
+def getRoomNames():
+    rooms = scanForRooms()
+    roomNames = []
+    for room in rooms:
+        roomNames.append(room['name'])
+    return roomNames
 
 def scanForEnterntainmentRooms(bridge):
     groups = bridge.get_group()
@@ -68,14 +74,7 @@ def getGroupsNames():
 
 
 
-    
-#addLightToGroup()
-# set up room control
-# def createNewRoom()
-# def createNewGroup()
-# def listLights(Target room or group)
-# def getGroups()
-
-
 # Main
 bridge = discovery()
+
+pprint.pprint(scanForRooms())
