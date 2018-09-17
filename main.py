@@ -37,7 +37,7 @@ def scanForRooms():
         if val['type'] == 'Room':
             rooms.append(val)
     return rooms
-    
+
 def getRoomNames():
     rooms = scanForRooms()
     roomNames = []
@@ -72,9 +72,22 @@ def getGroupsNames():
         groupNames.append(val['name'])
     return groupNames
 
-
+def getRoombyName(name, rooms = None):
+    
+    if rooms != None:
+        NotImplemented
+    else:
+        rooms=scanForRooms()
+        for room in rooms:
+            if (room['name'] == name):
+                return room
+        
+    
 
 # Main
 bridge = discovery()
 
-pprint.pprint(scanForRooms())
+# pprint.pprint(scanForRooms())
+
+
+
