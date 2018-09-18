@@ -65,8 +65,14 @@ def getLights(target = None):
     else:
         target = target['name']
         id = int(bridge.get_group_id_by_name(target))
-        print(id)
         return bridge.get_group(id, 'lights')
+
+def getGroupLights(groups):
+
+    groupLights = []
+    for group in groups:
+        groupLights.append(bridge.get_group(int(bridge.get_group_id_by_name(group)), 'lights'))
+    return groupLights
 
 def getGroups():
     return bridge.get_group()
@@ -87,7 +93,14 @@ def getRoombyName(name, target = None):
     for room in rooms:
         if (room['name'] == name):
             return room
-        
+
+def getGroupsByName(groupNames):
+    groups = []
+    for groupName in groupNames:
+        groups.append(bridge.get_group_id_by_name(groupName))
+    return groups
+
+
 def filterRooms(state):
     filteredRooms = []
     rooms = scanForRooms()
@@ -101,11 +114,9 @@ def filterRooms(state):
 def groupLights(target):
     allLightsNames = []
     lights = getLights(target)
-    pprint.pprint(lights)
     for light in lights:
         allLightsNames.append((bridge.get_light(int(light), 'name')))
     return allLightsNames
-
 
 def areAllColor(lights):
     #all of them should have the 'hue' parameter
@@ -140,6 +151,12 @@ def getLightBrightness(lights):
 def brightnessToPercentage(brightness):
     return format((float(brightness)/254.0)*100, '.2f')
 
+def getAllLightsNames():
+    lightNames = []
+    lights = bridge.lights
+    for light in lights:
+        lightNames.append(light.name)
+    return lightNames
 
 # Main
 bridge = discovery()
