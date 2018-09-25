@@ -16,7 +16,7 @@ def discovery():
     # print('your bridge ID is {} and the IP adress on your network is {}'.format(bridgeID, bridgeIP))
     return connectToBridge(bridgeIP)
 
-def stripIP(ipToStrip):
+def stripIP(ipToStrip): #final
     ipToStrip = ipToStrip.replace(':80', '')
     ipToStrip = ipToStrip.replace('http://', '')
     ipToStrip = ipToStrip.replace('/', '')
@@ -30,6 +30,7 @@ def connectToBridge(bridgeIP):
     return bridge
 
 def scanForRooms():
+    #Scans for groups, filters to just rooms, returns a list of rooms(objects)
     #Rooms are very limited, groups are more flexible, rooms are a subset of groups.
     groups = bridge.get_group()
     rooms = []
@@ -39,16 +40,20 @@ def scanForRooms():
     return rooms
 
 def getRoomNames(target = None):
+    #With no target takes all the rooms, with target(a custom group or a subset of rooms) returns a list with the names
+    #@Requires type(target) == dict
     if target == None:
         rooms = scanForRooms()
     else:
         rooms = target
+
     roomNames = []
     for room in rooms:
         roomNames.append(room['name'])
     return roomNames
 
-def scanForEnterntainmentRooms(bridge):
+def scanForEntertainmentRooms():
+    #Scans for groups, filters to just En, returns a list of rooms(objects)
     groups = bridge.get_group()
     eRooms = []
     for key, val in groups.items():
