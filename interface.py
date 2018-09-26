@@ -1,8 +1,12 @@
 import inquirer
 import main
+import os
 
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def mainMenu():
+    clear()
     mainMenuChoices = ['All lights', 'Rooms', 'Groups', 'Sensors', 'Bridge', 'Quit']
     questions = [
         inquirer.List('Main menu',
@@ -24,6 +28,7 @@ def mainMenu():
         exit()
 
 def allLightsMenu():
+    clear()
     questions = [
         inquirer.List('AllLightsMenu', choices=['All At Once', 'Pick Lights', 'Go back to Main menu']),
     ]
@@ -39,7 +44,7 @@ def allLightsMenu():
         exit()
 
 def allLightsAtOnceMenu():
-    
+    clear()
     questions = [
         inquirer.List('allAtOnce', 
                     choices=['Turn on', 'Turn off', 'Brightness Control', 'Go back']),
@@ -59,6 +64,7 @@ def allLightsAtOnceMenu():
         exit()
     
 def pickLightsMenu():
+    clear()
     questions = [
         inquirer.Checkbox('PickLightsMenu',
                         'Select the lights you want to control', choices=main.getAllLightsNames()),
@@ -69,6 +75,7 @@ def pickLightsMenu():
     lightsControl(answers['PickLightsMenu'])    
 
 def lightsControl(chosenLightNames):
+    clear()
     possibleChoices = ['Turn on', 'Turn off', 'Brightness Control']
     if(main.areAllColor(chosenLightNames)):
         possibleChoices.append('Color Control')
@@ -98,6 +105,6 @@ def lightsControl(chosenLightNames):
 def colorControlMenu():
     NotImplemented
 
-    
+
 mainMenu()
 
