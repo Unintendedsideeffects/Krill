@@ -53,7 +53,7 @@ def getRoomNames(target = None):
     return roomNames
 
 def scanForEntertainmentRooms():
-    #Scans for groups, filters to just En, returns a list of rooms(objects)
+    #Scans for groups, filters to just Entertainment Rooms, returns a list of Entertainment rooms(objects)
     groups = bridge.get_group()
     eRooms = []
     for key, val in groups.items():
@@ -68,9 +68,10 @@ def getLights(target = None):
     if target == None:
         return bridge.lights
     else:
-        target = target['name']
-        id = int(bridge.get_group_id_by_name(target))
-        return bridge.get_group(id, 'lights')
+        if type(target) == dict:
+            target = target['name']
+            id = int(bridge.get_group_id_by_name(target))
+            return bridge.get_group(id, 'lights')
 
 def getGroupLights(groups):
 
@@ -123,10 +124,10 @@ def groupLights(target):
         allLightsNames.append((bridge.get_light(int(light), 'name')))
     return allLightsNames
 
-def areAllColor(lights):
+def areAllColor(lightNames):
     #all of them should have the 'hue' parameter
     # lightObjects = []
-    for light in lights:
+    for light in lightNames:
         check = bridge.get_light(light)
         if ('hue' not in check['state'].keys()):
             return False
@@ -134,12 +135,18 @@ def areAllColor(lights):
     return True
 
 def lightTurnOn(lights):
-    for light in lights:
-        bridge.set_light(light, 'on', True)
-        
+        for light in lights:
+            if type(light) == dict:
+                bridge.set_light(light['name'], 'on', True)
+            elif type(light) == list:
+                bridge.set_light(light.name, 'on', True)     
+
 def lightTurnOff(lights):
     for light in lights:
-        bridge.set_light(light, 'on', False)
+            if type(light) == dict:
+                bridge.set_light(light['name'], 'on', False)
+            elif type(light) == list:
+                bridge.set_light(light.name, 'on', False)
 
 def setLightBrightness(lights, brightness):
     for light in lights:
@@ -163,12 +170,16 @@ def getAllLightsNames():
         lightNames.append(light.name)
     return lightNames
 
+def getLightByName(chosenLightsNames):
+    lights = []
+
+    for lightName in chosenLightsNames:
+        lights.append(bridge.get_light(lightName))
+    return lights
+        
+    
+
 # Main
 bridge = discovery()
-# pprint.pprint(bridge.get_light('Storage light 1'))
-# pprint.pprint(bridge.get_light('Office desk'))
 
-
-# print(getGroupsNames())
-# getLights('Office')
-# pprint.pprint(scanForRooms())
+# print(getLights())
