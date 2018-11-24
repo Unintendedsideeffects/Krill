@@ -52,7 +52,7 @@ def allLightsAtOnceMenu():
     answer = inquirer.prompt(questions)
     
     if(answer['allAtOnce'] == 'Turn on'):
-        main.lightTurnOn(main.getLights())
+        main.lightTurnOn(main.getLightByName(main.getLights()))
     elif(answer['allAtOnce'] == 'Turn off'):
         main.lightTurnOff(main.getLights())
     elif(answer['allAtOnce'] == 'Brightness Control'):
@@ -104,6 +104,10 @@ def lightsControl(chosenLightNames):
 
 def colorControlMenu():
     NotImplemented
+def brightnessControlMenu():
+    NotImplemented
+
+
 
 
 mainMenu()

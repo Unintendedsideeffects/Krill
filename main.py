@@ -24,9 +24,9 @@ def stripIP(ipToStrip): #final
 
 def connectToBridge(bridgeIP):
     bridge = phue.Bridge(bridgeIP)
-    # TODO ask the user to press the button on the bridge, show a timer
+    # TODO ask the user to press the button on the bridge, show a timer in the UI
     # this next line has to be run only once.
-    # bridge.connect()
+    bridge.connect()
     return bridge
 
 def scanForRooms():
@@ -65,6 +65,7 @@ def createNewGroup(name, lights):
     return bridge.create_group(name, lights)
 
 def getLights(target = None):
+    #returns all lights as objects if no target is specified, other behavior to test and document #TODO target given
     if target == None:
         return bridge.lights
     else:
@@ -74,16 +75,18 @@ def getLights(target = None):
             return bridge.get_group(id, 'lights')
 
 def getGroupLights(groups):
-
+    #Get all the lights in a group
     groupLights = []
     for group in groups:
         groupLights.append(bridge.get_group(int(bridge.get_group_id_by_name(group)), 'lights'))
     return groupLights
 
 def getGroups():
+    #Get all the groups on the bridge as objects
     return bridge.get_group()
 
 def getGroupsNames():
+    #Get all the groups on the bridge as a list of names
     groups = bridge.get_group()
     groupNames = []
     for key, val in groups.items():
@@ -91,8 +94,8 @@ def getGroupsNames():
     return groupNames
 
 def getRoombyName(name, target = None):
-    
-    if target == None:
+    #Get room object by name 
+    if(target == None):
         rooms=scanForRooms()
     else:
         rooms = target
@@ -163,9 +166,11 @@ def getLightBrightness(lights):
 def brightnessToPercentage(brightness):
     return format((float(brightness)/254.0)*100, '.2f')
 
-def getAllLightsNames():
+def getLightsNames(lights = None):
     lightNames = []
-    lights = bridge.lights
+    if lights == None:
+        lights = bridge.lights
+
     for light in lights:
         lightNames.append(light.name)
     return lightNames
@@ -176,8 +181,17 @@ def getLightByName(chosenLightsNames):
     for lightName in chosenLightsNames:
         lights.append(bridge.get_light(lightName))
     return lights
-        
-    
+
+
+def setColorToLight(lights, color):
+    lightNames = getLightsNames(lights)
+    command = {'hue': huevalue, 'sat':satvalue}
+    if areAllColor(lightNames): #We should just deal with the light objects not the names
+        bridge.set_light(lightNames, 'on', True)
+
+            
+            
+     
 
 # Main
 bridge = discovery()
